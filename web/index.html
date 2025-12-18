@@ -224,6 +224,60 @@
         // Poll every 2 seconds
         setInterval(fetchState, 2000);
         fetchState();
+
+        // MetaMask Logic
+        let userAccount = null;
+
+        async function connectWallet() {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    userAccount = accounts[0];
+                    document.getElementById('connectBtn').style.display = 'none';
+                    document.getElementById('walletInfo').style.display = 'block';
+                    document.getElementById('userAddress').innerText = userAccount;
+                    document.getElementById('miningAddrSmall').innerText = REWARD_ADDR;
+
+                    // Check mismatch
+                    if (userAccount.toLowerCase() !== REWARD_ADDR.toLowerCase()) {
+                        document.getElementById('mismatchWarning').style.display = 'block';
+                    } else {
+                        document.getElementById('mismatchWarning').style.display = 'none';
+                    }
+
+                    // Start polling user balance
+                    updateUserBalance();
+                    setInterval(updateUserBalance, 2000);
+
+                } catch (error) {
+                    console.error("User rejected connection", error);
+                }
+            } else {
+                alert("Please install MetaMask!");
+            }
+        }
+
+        async function updateUserBalance() {
+            if (!userAccount) return;
+            try {
+                const balRes = await fetch(RPC_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        jsonrpc: "2.0",
+                        method: "eth_getBalance",
+                        params: [userAccount, "latest"],
+                        id: 1
+                    })
+                });
+                const balData = await balRes.json();
+                const wei = BigInt(balData.result);
+                const wnc = Number(wei) / 1e18;
+                document.getElementById('userBalance').innerText = wnc.toFixed(4);
+            } catch (e) {
+                console.error("Error fetching user balance", e);
+            }
+        }
     </script>
 </body>
 </html>
