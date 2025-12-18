@@ -341,15 +341,12 @@
                             decimals: 18
                         },
                         rpcUrls: [RPC_URL],
-                        // Use local URL first, then GitHub as backup
-                        iconUrls: [
-                            window.location.origin + '/logo.svg',
-                            "https://raw.githubusercontent.com/prabs401/WINMAR_CHAIN/main/web/logo.svg"
-                        ] 
-                    }]
-                });
-                alert("Request sent to MetaMask! \n\nIf the logo still doesn't appear:\n1. Open MetaMask Settings > Networks\n2. Delete 'Winmar Chain'\n3. Click this button again.");
-            } catch (error) {
+                            // Use Base64 Data URI to ensure logo works offline/locally
+                            iconUrls: ["data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDYxMyA2MTMiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPgogICAgPGRlZnM+CiAgICAgICAgPGxpbmVhckdyYWRpZW50IGlkPSJnb2xkLWdyYWRpZW50IiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6I0ZGRDcwMDtzdG9wLW9wYWNpdHk6MSIgLz4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojQjg4NjBCO3N0b3Atb3BhY2l0eToxIiAvPgogICAgICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8L2RlZnM+CiAgICA8Y2lyY2xlIGN4PSIzMDYiIGN5PSIzMDYiIHI9IjI4MCIgZmlsbD0idXJsKCNnb2xkLWdyYWRpZW50KSIgc3Ryb2tlPSIjREFBNTIwIiBzdHJva2Utd2lkdGg9IjEwIi8+CiAgICA8cGF0aCBkPSJNMTYwIDE2MCBMMjQwIDQ1MCBMMzA2IDI0MCBMMzcyIDQ1MCBMNDUyIDE2MCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI1MCIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CiAgICA8dGV4dCB4PSIzMDYiIHk9IjU1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjUwIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPldJTk1BUjwvdGV4dD4KPC9zdmc+Cg=="] 
+                        }]
+                    });
+                    alert("Request sent to MetaMask! \n\nIMPORTANT: If the logo still doesn't appear, you MUST delete the 'Winmar Chain' network from MetaMask Settings and try again.");
+                } catch (addError) {
                 console.error("Failed to add chain", error);
                 alert("Error adding network: " + error.message);
             }
