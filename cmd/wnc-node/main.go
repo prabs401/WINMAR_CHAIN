@@ -22,7 +22,10 @@ var (
 	balances       = make(map[string]*big.Int)
 	rewardAddr     string
 	rewardPerBlock = new(big.Int)
+	initialReward  = new(big.Int)
 )
+
+const HalvingInterval = 50 // Fast halving for demo purposes (usually 210,000)
 
 // RPC types
 type JSONRPCRequest struct {
@@ -54,7 +57,9 @@ func main() {
 	if rewardAddr == "" {
 		rewardAddr = "0xlocal-validator"
 	}
-	rewardPerBlock.SetString("1000000000000000000", 10)
+	// Initial reward: 50 WNC
+	initialReward.SetString("50000000000000000000", 10)
+	rewardPerBlock.Set(initialReward)
 
 	// Simulate startup
 	time.Sleep(1 * time.Second)
@@ -114,14 +119,25 @@ func main() {
 			sum := sha256.Sum256([]byte(fmt.Sprintf("winmar-block-%d", h)))
 			hash := fmt.Sprintf("0x%x", sum)
 
-			log.Printf("Proposed block #%d Hash: %s", h, hash)
+			// Calculate Halving
+			halvings := uint(h / HalvingInterval)
+			// Right shift initial reward by number of halvings (equivalent to dividing by 2^n)
+			currentBlockReward := new(big.Int).Rsh(initialReward, halvings)
+
+			log.Printf("Proposed block #%d Hash: %s | Reward: %s WNC", h, hash, toWNC(currentBlockReward))
 			mu.Lock()
 			currentHash = hash
+			rewardPerBlock.Set(currentBlockReward) // Update global state for API
 			if _, ok := balances[rewardAddr]; !ok {
 				balances[rewardAddr] = new(big.Int)
 			}
-			balances[rewardAddr].Add(balances[rewardAddr], rewardPerBlock)
+			balances[rewardAddr].Add(balances[rewardAddr], currentBlockReward)
 			mu.Unlock()
+
+			// Announce halving event
+			if h > 0 && h%HalvingInterval == 0 {
+				log.Printf("⚠️ HALVING EVENT! Block Reward reduced to %s WNC", toWNC(currentBlockReward))
+			}
 		}
 	}()
 

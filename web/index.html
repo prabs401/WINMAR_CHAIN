@@ -156,6 +156,7 @@
                 const blockData = await blockRes.json();
                 document.getElementById('height').innerText = blockData.height;
                 document.getElementById('hash').innerText = blockData.hash;
+                document.getElementById('reward').innerText = blockData.reward || "50";
 
             } catch (e) {
                 console.error("Connection error:", e);
