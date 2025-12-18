@@ -1,0 +1,36 @@
+{
+  "chainId": 8822,
+  "name": "Winmar Network",
+  "timestamp": "2025-12-18T00:00:00Z",
+  "nonce": "0x0000000000000000",
+  "message": "Winmar Network Genesis — Decentralize Infrastructure — 2025-12-18",
+  "initialSupply": "1000000000",
+  "supplyCap": "2000000000",
+  "decimals": 18,
+  "allocations": [
+    {"address": "0x0000000000000000000000000000000000000001", "amount": "700000000"},
+    {"address": "0x0000000000000000000000000000000000000002", "amount": "200000000"},
+    {"address": "0x0000000000000000000000000000000000000003", "amount": "100000000"}
+  ],
+  "consensus": {
+    "type": "PoS",
+    "slotSeconds": 2,
+    "epochSlots": 300,
+    "minStake": "32000",
+    "maxValidators": 2048,
+    "finalityEpochs": 2
+  },
+  "fees": {
+    "baseFeeInitial": "1000000000",
+    "gasLimitInitial": 30000000,
+    "targetGasPerBlock": 10000000
+  },
+  "bootValidators": [
+    {
+      "pubkeyBls": "0x",
+      "withdrawalCredentials": "0x",
+      "stake": "32000",
+      "signature": "0x"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+# Binaries
+build/
+bin/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp

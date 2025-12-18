@@ -1,0 +1,47 @@
+version: "3.8"
+services:
+  node1:
+    image: winmar/wnc-node:1.0
+    ports:
+      - "43333:43333"
+      - "8545:8545"
+      - "8546:8546"
+    volumes:
+      - ../config:/config
+    command: ["--config","/config/node.toml"]
+  node2:
+    image: winmar/wnc-node:1.0
+    ports:
+      - "43334:43333"
+      - "18545:8545"
+      - "18546:8546"
+    volumes:
+      - ../config:/config
+    command: ["--config","/config/node.toml"]
+  node3:
+    image: winmar/wnc-node:1.0
+    ports:
+      - "43335:43333"
+      - "28545:8545"
+      - "28546:8546"
+    volumes:
+      - ../config:/config
+    command: ["--config","/config/node.toml"]
+  node4:
+    image: winmar/wnc-node:1.0
+    ports:
+      - "43336:43333"
+      - "38545:8545"
+      - "38546:8546"
+    volumes:
+      - ../config:/config
+    command: ["--config","/config/node.toml"]
+  node5:
+    image: winmar/wnc-node:1.0
+    ports:
+      - "43337:43333"
+      - "48545:8545"
+      - "48546:8546"
+    volumes:
+      - ../config:/config
+    command: ["--config","/config/node.toml"]

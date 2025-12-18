@@ -1,0 +1,26 @@
+[network]
+p2p_port = 43333
+rpc_http_port = 8545
+rpc_ws_port = 8546
+bootnodes = [
+  "enode://<pubkey>@seed1.winmar.network:43333",
+  "enode://<pubkey>@seed2.winmar.network:43333"
+]
+
+[consensus]
+type = "pos"
+slot_seconds = 2
+epoch_slots = 300
+min_stake_wnc = 32000
+max_validators = 2048
+finality_epochs = 2
+
+[mempool]
+max_txs = 100000
+min_gas_price = 1000000000
+tx_ttl_seconds = 600
+
+[fees]
+gas_limit = 30000000
+target_gas = 10000000
+base_fee_initial = 1000000000

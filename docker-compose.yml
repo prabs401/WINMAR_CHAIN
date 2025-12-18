@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  node1:
+    image: winmar/wnc-node:1.0
+    ports:
+      - "43333:43333"
+      - "8545:8545"
+      - "8546:8546"
+    volumes:
+      - ./config:/config
+    command: ["--config","/config/node.toml"]
