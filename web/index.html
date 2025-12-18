@@ -153,8 +153,13 @@
 
     <script>
         const REWARD_ADDR = "0xa4fa508951F4777bf23A9cfCb9776997F513132B";
-        const RPC_URL = "http://localhost:8545";
-        const BLOCK_URL = "http://localhost:8545/block";
+        
+        // Dynamic URL detection for VPS/Localhost support
+        // This allows the dashboard to work on any server IP without changing code
+        const NODE_HOST = window.location.hostname;
+        const NODE_PORT = "8545";
+        const RPC_URL = `http://${NODE_HOST}:${NODE_PORT}`;
+        const BLOCK_URL = `http://${NODE_HOST}:${NODE_PORT}/block`;
 
         document.getElementById('address').innerText = REWARD_ADDR;
 

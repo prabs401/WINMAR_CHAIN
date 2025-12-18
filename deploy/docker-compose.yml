@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  # 1. Winmar Chain Node
+  node:
+    build: 
+      context: ..
+      dockerfile: Dockerfile
+    container_name: winmar-node
+    ports:
+      - "8545:8545"   # RPC Port (Must be exposed for Dashboard to connect)
+      - "43333:43333" # P2P Port
+    environment:
+      - WNC_REWARD_ADDRESS=0xa4fa508951F4777bf23A9cfCb9776997F513132B
+    restart: always
+
+  # 2. Web Dashboard
+  dashboard:
+    image: nginx:alpine
+    container_name: winmar-dashboard
+    ports:
+      - "80:80" # Web Server Port
+    volumes:
+      - ../web:/usr/share/nginx/html # Serve the web folder directly
+    depends_on:
+      - node
+    restart: always
