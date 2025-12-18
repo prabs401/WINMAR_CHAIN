@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"math/big"
+	"math/rand"
 	"net/http"
 	"os"
 	"strings"
@@ -23,6 +24,7 @@ var (
 	rewardAddr     string
 	rewardPerBlock = new(big.Int)
 	initialReward  = new(big.Int)
+	minReward      = new(big.Int)
 )
 
 const HalvingInterval = 50 // Fast halving for demo purposes (usually 210,000)
@@ -48,7 +50,7 @@ type RPCError struct {
 }
 
 func main() {
-	fmt.Println("Winmar Chain (WNC) Node v1.0.0")
+	fmt.Println("Winmar Chain (WNC) Node v1.1.0 (Golden Protocol)")
 	fmt.Println("Initializing Winmar Network...")
 	fmt.Println("Loading configuration...")
 
@@ -59,6 +61,9 @@ func main() {
 	}
 	// Initial reward: 50 WNC
 	initialReward.SetString("50000000000000000000", 10)
+	// Minimum Reward (Tail Emission): 1 WNC
+	minReward.SetString("1000000000000000000", 10)
+
 	rewardPerBlock.Set(initialReward)
 
 	// Simulate startup
@@ -124,7 +129,27 @@ func main() {
 			// Right shift initial reward by number of halvings (equivalent to dividing by 2^n)
 			currentBlockReward := new(big.Int).Rsh(initialReward, halvings)
 
-			log.Printf("Proposed block #%d Hash: %s | Reward: %s WNC", h, hash, toWNC(currentBlockReward))
+			// 1. ABADI MECHANISM: Tail Emission
+			// If reward drops below MinReward, clamp it to MinReward
+			if currentBlockReward.Cmp(minReward) < 0 {
+				currentBlockReward.Set(minReward)
+			}
+
+			// 2. MENYENANGKAN MECHANISM: Lucky Critical Block
+			// 10% Chance to get 2x Reward
+			isCritical := false
+			if rand.Intn(100) < 10 {
+				multiplier := big.NewInt(2)
+				currentBlockReward.Mul(currentBlockReward, multiplier)
+				isCritical = true
+			}
+
+			logMsg := fmt.Sprintf("Proposed block #%d Hash: %s | Reward: %s WNC", h, hash, toWNC(currentBlockReward))
+			if isCritical {
+				logMsg += " [🔥 CRITICAL HIT! 2x REWARD 🔥]"
+			}
+			log.Println(logMsg)
+
 			mu.Lock()
 			currentHash = hash
 			rewardPerBlock.Set(currentBlockReward) // Update global state for API
