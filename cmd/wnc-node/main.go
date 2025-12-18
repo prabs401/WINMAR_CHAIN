@@ -15,6 +15,51 @@ import (
 	"time"
 )
 
+// Persistence
+const StateFile = "chaindata.json"
+
+type ChainState struct {
+	Height   int64               `json:"height"`
+	Balances map[string]*big.Int `json:"balances"`
+}
+
+func saveState() {
+	mu.Lock()
+	defer mu.Unlock()
+
+	state := ChainState{
+		Height:   atomic.LoadInt64(&height),
+		Balances: balances,
+	}
+
+	log.Println("Saving state to chaindata.json...") // Debug log
+	file, err := json.MarshalIndent(state, "", " ")
+	if err == nil {
+		err = os.WriteFile(StateFile, file, 0644)
+		if err != nil {
+			log.Printf("❌ Failed to write state file: %v", err)
+		}
+	} else {
+		log.Printf("❌ Failed to marshal state: %v", err)
+	}
+}
+
+func loadState() {
+	file, err := os.ReadFile(StateFile)
+	if err != nil {
+		return // Start from scratch
+	}
+
+	var state ChainState
+	if err := json.Unmarshal(file, &state); err == nil {
+		atomic.StoreInt64(&height, state.Height)
+		mu.Lock()
+		balances = state.Balances
+		mu.Unlock()
+		fmt.Printf("⚠️ RECOVERED CHAIN STATE! Resuming from Block #%d\n", state.Height)
+	}
+}
+
 // Global state
 var (
 	height         int64
@@ -31,17 +76,17 @@ const HalvingInterval = 50 // Fast halving for demo purposes (usually 210,000)
 
 // RPC types
 type JSONRPCRequest struct {
-	JSONRPC string        `json:"jsonrpc"`
-	Method  string        `json:"method"`
-	Params  []interface{} `json:"params"`
-	ID      interface{}   `json:"id"`
+	JSONRPC string `json:"jsonrpc"`
+	Method  string `json:"method"`
+	Params  []any  `json:"params"`
+	ID      any    `json:"id"`
 }
 
 type JSONRPCResponse struct {
-	JSONRPC string      `json:"jsonrpc"`
-	ID      interface{} `json:"id"`
-	Result  interface{} `json:"result,omitempty"`
-	Error   *RPCError   `json:"error,omitempty"`
+	JSONRPC string    `json:"jsonrpc"`
+	ID      any       `json:"id"`
+	Result  any       `json:"result,omitempty"`
+	Error   *RPCError `json:"error,omitempty"`
 }
 
 type RPCError struct {
@@ -51,6 +96,10 @@ type RPCError struct {
 
 func main() {
 	fmt.Println("Winmar Chain (WNC) Node v1.1.0 (Golden Protocol)")
+
+	// Load previous state if exists
+	loadState()
+
 	fmt.Println("Initializing Winmar Network...")
 	fmt.Println("Loading configuration...")
 
@@ -90,7 +139,7 @@ func main() {
 		if hash == "" {
 			hash = "0x0000000000000000000000000000000000000000000000000000000000000000"
 		}
-		_, _ = w.Write([]byte(fmt.Sprintf(`{"height":%d,"hash":"%s"}`, h, hash)))
+		fmt.Fprintf(w, `{"height":%d,"hash":"%s"}`, h, hash)
 	})
 
 	http.HandleFunc("/balance", func(w http.ResponseWriter, r *http.Request) {
@@ -108,7 +157,7 @@ func main() {
 		balStr := bal.String()
 		mu.Unlock()
 		wncf := toWNC(bal)
-		_, _ = w.Write([]byte(fmt.Sprintf(`{"address":"%s","balanceWei":"%s","balanceWNC":"%s"}`, addr, balStr, wncf)))
+		fmt.Fprintf(w, `{"address":"%s","balanceWei":"%s","balanceWNC":"%s"}`, addr, balStr, wncf)
 	})
 
 	// JSON-RPC handler
@@ -158,6 +207,9 @@ func main() {
 			}
 			balances[rewardAddr].Add(balances[rewardAddr], currentBlockReward)
 			mu.Unlock()
+
+			// Save state every block
+			saveState()
 
 			// Announce halving event
 			if h > 0 && h%HalvingInterval == 0 {
