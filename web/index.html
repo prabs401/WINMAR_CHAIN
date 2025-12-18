@@ -159,7 +159,10 @@
                 if (rewardEl) rewardEl.innerText = blockData.reward || "50";
                 
                 const heightEl = document.getElementById('height');
-                if (heightEl) heightEl.innerText = blockData.height;
+                if (heightEl) {
+                    heightEl.innerText = blockData.height;
+                    updateHalvingTable(blockData.height);
+                }
 
                 const hashEl = document.getElementById('hash');
                 if (hashEl) hashEl.innerText = blockData.hash;
@@ -167,6 +170,24 @@
 
             } catch (e) {
                 console.error("Connection error:", e);
+            }
+        }
+
+        function updateHalvingTable(height) {
+            // Reset all rows
+            for (let i = 1; i <= 5; i++) {
+                const row = document.getElementById(`phase-${i}`);
+                if (row) row.classList.remove('active-phase');
+            }
+
+            // Determine active phase (Interval is 50)
+            const phase = Math.floor(height / 50) + 1;
+            const activeRow = document.getElementById(`phase-${phase}`);
+            if (activeRow) {
+                activeRow.classList.add('active-phase');
+            } else if (phase > 5) {
+                // Keep the last one active if we go beyond
+                document.getElementById('phase-5').classList.add('active-phase');
             }
         }
 
