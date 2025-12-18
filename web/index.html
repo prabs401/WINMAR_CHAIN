@@ -154,9 +154,16 @@
                 // Fetch Block Info (Height + Hash) via custom endpoint
                 const blockRes = await fetch(BLOCK_URL);
                 const blockData = await blockRes.json();
-                document.getElementById('height').innerText = blockData.height;
-                document.getElementById('hash').innerText = blockData.hash;
-                document.getElementById('reward').innerText = blockData.reward || "50";
+                // Update DOM elements safely
+                const rewardEl = document.getElementById('reward');
+                if (rewardEl) rewardEl.innerText = blockData.reward || "50";
+                
+                const heightEl = document.getElementById('height');
+                if (heightEl) heightEl.innerText = blockData.height;
+
+                const hashEl = document.getElementById('hash');
+                if (hashEl) hashEl.innerText = blockData.hash;
+
 
             } catch (e) {
                 console.error("Connection error:", e);
