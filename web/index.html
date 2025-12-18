@@ -293,25 +293,17 @@
                             decimals: 18
                         },
                         rpcUrls: [RPC_URL],
-                        iconUrls: ["https://raw.githubusercontent.com/prabs401/WINMAR_CHAIN/main/web/logo.svg"] 
+                        // Use local URL first, then GitHub as backup
+                        iconUrls: [
+                            window.location.origin + '/logo.svg',
+                            "https://raw.githubusercontent.com/prabs401/WINMAR_CHAIN/main/web/logo.svg"
+                        ] 
                     }]
                 });
-                // Also try watchAsset for good measure if chain is already added
-                await window.ethereum.request({
-                    method: 'wallet_watchAsset',
-                    params: {
-                        type: 'ERC20',
-                        options: {
-                            address: "0x0000000000000000000000000000000000000000", 
-                            symbol: "WNC",
-                            decimals: 18,
-                            image: "https://raw.githubusercontent.com/prabs401/WINMAR_CHAIN/main/web/logo.svg",
-                        },
-                    },
-                });
+                alert("Request sent to MetaMask! \n\nIf the logo still doesn't appear:\n1. Open MetaMask Settings > Networks\n2. Delete 'Winmar Chain'\n3. Click this button again.");
             } catch (error) {
-                console.error(error);
-                alert("If adding network fails, please check your MetaMask network settings.");
+                console.error("Failed to add chain", error);
+                alert("Error adding network: " + error.message);
             }
         }
 
