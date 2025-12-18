@@ -122,7 +122,28 @@
 
         <div class="stats">
             <div>Block Height: <span id="height">0</span></div>
+            <div>Reward: <span id="reward" style="color:#FFD700">50</span> WNC</div>
             <div>Chain ID: 8822</div>
+        </div>
+
+        <div style="margin-top: 30px; width: 100%;">
+            <div style="color: #FFD700; margin-bottom: 10px; font-size: 0.9em;">⚠️ Halving Schedule (Every 50 Blocks)</div>
+            <table class="halving-schedule">
+                <thead>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Block Range</th>
+                        <th>Reward</th>
+                    </tr>
+                </thead>
+                <tbody id="halving-body">
+                    <tr id="phase-1" class="active-phase"><td>1</td><td>0 - 49</td><td>50 WNC</td></tr>
+                    <tr id="phase-2"><td>2</td><td>50 - 99</td><td>25 WNC</td></tr>
+                    <tr id="phase-3"><td>3</td><td>100 - 149</td><td>12.5 WNC</td></tr>
+                    <tr id="phase-4"><td>4</td><td>150 - 199</td><td>6.25 WNC</td></tr>
+                    <tr id="phase-5"><td>5</td><td>200+</td><td>3.125 WNC</td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
