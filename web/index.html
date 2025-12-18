@@ -278,6 +278,43 @@
                 console.error("Error fetching user balance", e);
             }
         }
-    </script>
+
+        async function addTokenToMetaMask() {
+            try {
+                // Suggest adding the Chain with the Icon URL
+                await window.ethereum.request({
+                    method: 'wallet_addEthereumChain',
+                    params: [{
+                        chainId: '0x2276', // 8822
+                        chainName: 'Winmar Chain',
+                        nativeCurrency: {
+                            name: 'Winmar Coin',
+                            symbol: 'WNC',
+                            decimals: 18
+                        },
+                        rpcUrls: [RPC_URL],
+                        iconUrls: ["https://raw.githubusercontent.com/prabs401/WINMAR_CHAIN/main/web/logo.svg"] 
+                    }]
+                });
+                // Also try watchAsset for good measure if chain is already added
+                await window.ethereum.request({
+                    method: 'wallet_watchAsset',
+                    params: {
+                        type: 'ERC20',
+                        options: {
+                            address: "0x0000000000000000000000000000000000000000", 
+                            symbol: "WNC",
+                            decimals: 18,
+                            image: "https://raw.githubusercontent.com/prabs401/WINMAR_CHAIN/main/web/logo.svg",
+                        },
+                    },
+                });
+            } catch (error) {
+                console.error(error);
+                alert("If adding network fails, please check your MetaMask network settings.");
+            }
+        }
+
+        </script>
 </body>
 </html>
