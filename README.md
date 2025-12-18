@@ -13,6 +13,34 @@
 - **EVM Compatible**: Fully compatible with Ethereum tools (Metamask, Hardhat, Remix).
 - **Network ID**: `8822`
 
+## Winmar Golden Protocol 🌟
+Winmar Chain implements a unique economic model designed to be Safe, Fun, Durable, and Eternal.
+
+### 1. Halving Schedule (Safe)
+Block rewards reduce by 50% every 210,000 blocks (Demo: every 50 blocks).
+- Phase 1: 50 WNC
+- Phase 2: 25 WNC
+- Phase 3: 12.5 WNC
+- ...
+
+### 2. Lucky Critical Block (Fun) 🎲
+Every block has a **10% chance** to be a "Critical Hit", awarding **2x the normal reward**.
+Mining is no longer boring; it's a treasure hunt!
+
+### 3. Tail Emission (Eternal) 🛡️
+To ensure the chain lives forever, the block reward will **never drop below 1 WNC**.
+This guarantees miners are always incentivized to secure the network, even 100 years from now.
+
+### 4. Persistence & Safety (Durable) 💾
+- **Auto-Save**: Chain state is saved to disk (`chaindata.json`) every block.
+- **Crash Recovery**: Node automatically resumes from the last block after a restart.
+- **Backup Script**: Use `./backup.sh` to instantly backup your entire chain data.
+
+## Dashboard
+A built-in dashboard is available to monitor the chain status, rewards, and halving progress.
+- Local: http://localhost:8001
+- VPS: http://YOUR_VPS_IP:8001
+
 ## Getting Started
 
 ### Prerequisites
