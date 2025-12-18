@@ -48,19 +48,27 @@ To spin up a 5-node local testnet:
 docker-compose -f ops/testnet-compose.yml up -d
 ```
 
+### Run from GitHub Container Registry (GHCR)
+
+Once CI publishes the image, you can run directly:
+
+```bash
+docker run -p 43333:43333 -p 8545:8545 -p 8546:8546 \
+  ghcr.io/prabs401/wnc-node:latest --config /config/node.toml
+```
+
+Note: To enable global mining, operators should run their own nodes using the published image and open P2P/RPC ports.
+
 ## Mining / Staking Guide
 
-Winmar Chain uses Proof-of-Stake. To participate in consensus and earn `WNC` rewards:
+Winmar Chain uses Proof-of-Stake. To participate in consensus and earn `WNC` rewards, follow the guides below:
 
-1.  **Acquire WNC**: You need a minimum of **32,000 WNC**.
-2.  **Generate Validator Keys**:
-    ```bash
-    ./build/wnc-node account new
-    ```
-3.  **Register Validator**:
-    Send a deposit transaction to the staking contract (see `docs/staking.md` for details).
-4.  **Configure Node**:
-    Add your BLS private key to the node configuration or environment variables.
+- English: `docs/mining-staking.en.md`
+- Indonesia: `docs/mining-staking.id.md`
+- 中文: `docs/mining-staking.zh.md`
+- Русский: `docs/mining-staking.ru.md`
+- Español: `docs/mining-staking.es.md`
+- العربية: `docs/mining-staking.ar.md`
 
 ## Technical Specification
 
