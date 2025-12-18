@@ -68,6 +68,33 @@
             font-size: 0.9em;
             color: #aaa;
         }
+        .btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #45a049;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #FFD700;
+            color: #FFD700;
+        }
+        .btn-outline:hover {
+            background: rgba(255, 215, 0, 0.1);
+        }
+        .wallet-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+        }
         .hash-container {
             margin-top: 20px;
             padding: 10px;
@@ -124,6 +151,27 @@
             <div>Block Height: <span id="height">0</span></div>
             <div>Reward: <span id="reward" style="color:#FFD700">50</span> WNC</div>
             <div>Chain ID: 8822</div>
+        </div>
+
+        <div class="wallet-section">
+            <h3>My Wallet</h3>
+            <button id="connectBtn" class="btn" onclick="connectWallet()">Connect MetaMask</button>
+            
+            <div id="walletInfo" style="display: none;">
+                <div style="font-size: 0.9em; color: #aaa;">Connected Address:</div>
+                <div id="userAddress" class="address" style="color: #FFD700; margin-bottom: 10px;"></div>
+                
+                <div style="font-size: 1.2em;">My Balance: <span id="userBalance" style="color: #fff; font-weight: bold;">0.00</span> WNC</div>
+                
+                <button class="btn btn-outline" onclick="addTokenToMetaMask()" style="margin-top: 15px;">
+                    Add WNC Logo to MetaMask 🦊
+                </button>
+
+                <div id="mismatchWarning" style="display:none; color: #ff4444; margin-top: 10px; font-size: 0.8em; border: 1px solid #ff4444; padding: 5px; border-radius: 5px;">
+                    ⚠️ You are not connected with the Mining Address!<br>
+                    Mining goes to: <span id="miningAddrSmall"></span>
+                </div>
+            </div>
         </div>
 
         <div style="margin-top: 30px; width: 100%;">
